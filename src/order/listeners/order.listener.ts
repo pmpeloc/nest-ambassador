@@ -16,6 +16,11 @@ export class OrderListener {
     const client = this.redisService.getClient();
     client.zincrby('rankings', order.ambassador_revenue, order.user.name);
     // produce a message
-    await this.client.emit('services', order);
+    const data = {
+      ...order,
+      total: order.total,
+      ambassador_revenue: order.ambassador_revenue,
+    };
+    await this.client.emit('services', JSON.stringify(data));
   }
 }
